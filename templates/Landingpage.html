@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JusticeConnect - Legal Support Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .dual-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .section-card:hover::before {
+            left: 100%;
+        }
+
+        .section-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+
+        .victims-section {
+            border-top: 5px solid #4CAF50;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .lawyers-section {
+            border-top: 5px solid #2196F3;
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        .section-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .victims-section .section-icon {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+        }
+
+        .lawyers-section .section-icon {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+        }
+
+        .section-card h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .section-card p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        .form-container {
+            margin-top: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .lawyers-section .form-group input:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-victims {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-victims:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-lawyers {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+        }
+
+        .btn-lawyers:hover {
+            background: linear-gradient(135deg, #1976D2, #1565C0);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(33, 150, 243, 0.3);
+        }
+
+        .help-links {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .help-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .help-links a:hover {
+            color: #4CAF50;
+        }
+
+        .lawyers-section .help-links a:hover {
+            color: #2196F3;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dual-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-card {
+                padding: 40px 30px;
+            }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            width: 120px;
+            height: 120px;
+            background: white;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            width: 60px;
+            height: 60px;
+            background: white;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>JusticeConnect</h1>
+            <p>Connecting those who need help with those who can provide it</p>
+        </div>
+
+        <div class="dual-section">
+            <div class="section-card victims-section">
+                <div class="section-icon">
+                    🛡️
+                </div>
+                <h2>Need Help?</h2>
+                <p>Get the legal support and guidance you deserve. Our platform connects you with experienced professionals who understand your situation.</p>
+                
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="victim-name">Your Name</label>
+                        <input type="text" id="victim-name" placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="victim-email">Email Address</label>
+                        <input type="email" id="victim-email" placeholder="your.email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="victim-phone">Phone Number</label>
+                        <input type="tel" id="victim-phone" placeholder="(555) 123-4567">
+                    </div>
+                    <button class="btn btn-victims" onclick="handleVictimSubmit()">Get Started</button>
+                </div>
+
+                <div class="help-links">
+                    <a href="#register">New Registration</a>
+                    <a href="#emergency">Emergency Help</a>
+                    <a href="#resources">Resources</a>
+                    <a href="#support">24/7 Support</a>
+                </div>
+            </div>
+
+            <div class="section-card lawyers-section">
+                <div class="section-icon">
+                    ⚖️
+                </div>
+                <h2>Legal Professional</h2>
+                <p>Access your client dashboard and case management tools. Help those in need while growing your practice.</p>
+                
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="lawyer-email">Professional Email</label>
+                        <input type="email" id="lawyer-email" placeholder="lawyer@lawfirm.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="lawyer-password">Password</label>
+                        <input type="password" id="lawyer-password" placeholder="Enter your password">
+                    </div>
+                    <div class="form-group">
+                        <label for="lawyer-bar">Bar Number</label>
+                        <input type="text" id="lawyer-bar" placeholder="Your bar admission number">
+                    </div>
+                    <button class="btn btn-lawyers" onclick="handleLawyerLogin()">Access Dashboard</button>
+                </div>
+
+                <div class="help-links">
+                    <a href="#signup">New Registration</a>
+                    <a href="#forgot">Forgot Password?</a>
+                    <a href="#support">Technical Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleVictimSubmit() {
+            const name = document.getElementById('victim-name').value;
+            const email = document.getElementById('victim-email').value;
+            const phone = document.getElementById('victim-phone').value;
+
+            if (!name || !email || !phone) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Simulate form submission
+            const btn = document.querySelector('.btn-victims');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Submitting...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert(`Thank you, ${name}. We've received your information and a legal advocate will contact you within 24 hours.`);
+                
+                // Reset form
+                document.getElementById('victim-name').value = '';
+                document.getElementById('victim-email').value = '';
+                document.getElementById('victim-phone').value = '';
+                
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        function handleLawyerLogin() {
+            const email = document.getElementById('lawyer-email').value;
+            const password = document.getElementById('lawyer-password').value;
+            const barNumber = document.getElementById('lawyer-bar').value;
+
+            if (!email || !password || !barNumber) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Simulate login
+            const btn = document.querySelector('.btn-lawyers');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Authenticating...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('Login successful! Redirecting to your dashboard...');
+                
+                // Reset form
+                document.getElementById('lawyer-email').value = '';
+                document.getElementById('lawyer-password').value = '';
+                document.getElementById('lawyer-bar').value = '';
+                
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        // Add some interactive animations
+        document.addEventListener('mousemove', (e) => {
+            const shapes = document.querySelectorAll('.shape');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 0.5;
+                const xPos = x * speed * 20;
+                const yPos = y * speed * 20;
+                shape.style.transform = `translate(${xPos}px, ${yPos}px)`;
+            });
+        });
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
