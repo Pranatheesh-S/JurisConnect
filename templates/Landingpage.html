@@ -44,6 +44,34 @@
             animation: fadeInUp 1s ease-out 0.2s both;
         }
 
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 10px;
+        }
+
+        .nav-tab {
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-tab.active,
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
         .dual-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -238,6 +266,31 @@
             color: #2196F3;
         }
 
+        .verification-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #FF6B6B, #EE5A52);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: auto;
+            display: inline-block;
+        }
+
+        .verification-btn:hover {
+            background: linear-gradient(135deg, #EE5A52, #E74C3C);
+            transform: translateY(-1px);
+        }
+
+        .verification-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -283,6 +336,16 @@
             
             .section-card {
                 padding: 40px 30px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-tab {
+                width: 100%;
+                max-width: 300px;
             }
         }
 
@@ -354,32 +417,32 @@
             <p>Connecting those who need help with those who can provide it</p>
         </div>
 
-        <div class="dual-section">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('login')">Login / Quick Help</button>
+            <button class="nav-tab" onclick="showSection('register')">New Registration</button>
+        </div>
+
+        <div id="login-section" class="dual-section">
             <div class="section-card victims-section">
                 <div class="section-icon">
                     🛡️
                 </div>
-                <h2>Need Help?</h2>
-                <p>Get the legal support and guidance you deserve. Our platform connects you with experienced professionals who understand your situation.</p>
+                <h2>Victim Login</h2>
+                <p>Access your profile, track your case, and communicate with your legal advocate securely.</p>
                 
                 <div class="form-container">
-                    <div class="form-group">
-                        <label for="victim-name">Your Name</label>
-                        <input type="text" id="victim-name" placeholder="Enter your full name">
-                    </div>
                     <div class="form-group">
                         <label for="victim-email">Email Address</label>
                         <input type="email" id="victim-email" placeholder="your.email@example.com">
                     </div>
                     <div class="form-group">
-                        <label for="victim-phone">Phone Number</label>
-                        <input type="tel" id="victim-phone" placeholder="(555) 123-4567">
+                        <label for="victim-password">Password</label>
+                        <input type="password" id="victim-password" placeholder="Enter your password">
                     </div>
-                    <button class="btn btn-victims" onclick="handleVictimSubmit()">Get Started</button>
+                    <button class="btn btn-victims" onclick="handleVictimLogin(event)">Login</button>
                 </div>
 
                 <div class="help-links">
-                    <a href="#register">New Registration</a>
                     <a href="#emergency">Emergency Help</a>
                     <a href="#resources">Resources</a>
                     <a href="#support">24/7 Support</a>
@@ -406,75 +469,372 @@
                         <label for="lawyer-bar">Bar Number</label>
                         <input type="text" id="lawyer-bar" placeholder="Your bar admission number">
                     </div>
-                    <button class="btn btn-lawyers" onclick="handleLawyerLogin()">Access Dashboard</button>
+                    <button class="btn btn-lawyers" onclick="handleLawyerLogin(event)">Access Dashboard</button>
                 </div>
 
                 <div class="help-links">
-                    <a href="#signup">New Registration</a>
                     <a href="#forgot">Forgot Password?</a>
                     <a href="#support">Technical Support</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="register-section" class="dual-section" style="display: none;">
+            <div class="section-card victims-section">
+                <div class="section-icon">
+                    📝
+                </div>
+                <h2>Register for Help</h2>
+                <p>Create your account to access personalized legal support, track your case progress, and connect with qualified advocates.</p>
+                
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="reg-victim-name">Full Name *</label>
+                        <input type="text" id="reg-victim-name" placeholder="Enter your full legal name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-victim-email">Email Address *</label>
+                        <input type="email" id="reg-victim-email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-victim-phone">Phone Number *</label>
+                        <input type="tel" id="reg-victim-phone" placeholder="(555) 123-4567" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-victim-address">Address</label>
+                        <input type="text" id="reg-victim-address" placeholder="Street address, City, State">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-victim-postcode">Postcode</label>
+                        <input type="text" id="reg-victim-postcode" placeholder="e.g., 90210">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-victim-password">Create Password *</label>
+                        <input type="password" id="reg-victim-password" placeholder="Minimum 8 characters" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-victim-confirm-password">Confirm Password *</label>
+                        <input type="password" id="reg-victim-confirm-password" placeholder="Re-enter your password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-victim-verification">Email Verification Code *</label>
+                        <input type="text" id="reg-victim-verification" placeholder="Enter 6-digit code sent to your email" maxlength="6" required>
+                        <button type="button" class="verification-btn" onclick="sendVictimVerificationCode(event)">Send Code</button>
+                    </div>
+                    <button class="btn btn-victims" onclick="handleVictimRegistration(event)">Create Account</button>
+                </div>
+
+                <div class="help-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#emergency">Emergency Help</a>
+                </div>
+            </div>
+            
+            <div class="section-card lawyers-section">
+                <div class="section-icon">
+                    👨‍⚖️
+                </div>
+                <h2>Join as Legal Advocate</h2>
+                <p>Expand your practice by helping those in need. Join our verified network of legal professionals making a difference.</p>
+                
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="reg-lawyer-name">Full Name *</label>
+                        <input type="text" id="reg-lawyer-name" placeholder="Enter your full legal name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-lawyer-email">Professional Email *</label>
+                        <input type="email" id="reg-lawyer-email" placeholder="lawyer@lawfirm.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-lawyer-phone">Phone Number *</label>
+                        <input type="tel" id="reg-lawyer-phone" placeholder="(555) 123-4567" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-lawyer-firm">Law Firm/Organization</label>
+                        <input type="text" id="reg-lawyer-firm" placeholder="Your firm or organization name">
+                    </div>
+                     <div class="form-group">
+                        <label for="reg-lawyer-postcode">Postcode *</label>
+                        <input type="text" id="reg-lawyer-postcode" placeholder="e.g., 90210" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-lawyer-bar">Bar Number *</label>
+                        <input type="text" id="reg-lawyer-bar" placeholder="Your bar admission number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-lawyer-specialization">Legal Specialization *</label>
+                        <input type="text" id="reg-lawyer-specialization" placeholder="e.g., Criminal Law, Family Law, Civil Rights" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-lawyer-experience">Years of Experience *</label>
+                        <input type="number" id="reg-lawyer-experience" placeholder="Years practicing law" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-lawyer-password">Create Password *</label>
+                        <input type="password" id="reg-lawyer-password" placeholder="Minimum 8 characters" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-lawyer-confirm-password">Confirm Password *</label>
+                        <input type="password" id="reg-lawyer-confirm-password" placeholder="Re-enter your password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-lawyer-verification">Email Verification Code *</label>
+                        <input type="text" id="reg-lawyer-verification" placeholder="Enter 6-digit code sent to your email" maxlength="6" required>
+                        <button type="button" class="verification-btn" onclick="sendLawyerVerificationCode(event)">Send Code</button>
+                    </div>
+                    <button class="btn btn-lawyers" onclick="handleLawyerRegistration(event)">Apply to Join</button>
+                </div>
+
+                <div class="help-links">
+                    <a href="#verification">Verification Process</a>
+                    <a href="#guidelines">Professional Guidelines</a>
+                    <a href="#support">Support</a>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        function handleVictimSubmit() {
-            const name = document.getElementById('victim-name').value;
-            const email = document.getElementById('victim-email').value;
-            const phone = document.getElementById('victim-phone').value;
+        // API Base URL (adjust if your backend runs on a different port)
+        const API_URL = 'http://127.0.0.1:5000';
 
-            if (!name || !email || !phone) {
-                alert('Please fill in all required fields.');
-                return;
+        function showSection(sectionName) {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('register-section').style.display = 'none';
+            document.getElementById(sectionName + '-section').style.display = 'grid';
+            
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            if (sectionName === 'login') {
+                tabs[0].classList.add('active');
+            } else if (sectionName === 'register') {
+                tabs[1].classList.add('active');
             }
-
-            // Simulate form submission
-            const btn = document.querySelector('.btn-victims');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = 'Submitting...';
-            btn.disabled = true;
-
-            setTimeout(() => {
-                alert(`Thank you, ${name}. We've received your information and a legal advocate will contact you within 24 hours.`);
-                
-                // Reset form
-                document.getElementById('victim-name').value = '';
-                document.getElementById('victim-email').value = '';
-                document.getElementById('victim-phone').value = '';
-                
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }, 2000);
         }
 
-        function handleLawyerLogin() {
-            const email = document.getElementById('lawyer-email').value;
-            const password = document.getElementById('lawyer-password').value;
-            const barNumber = document.getElementById('lawyer-bar').value;
-
-            if (!email || !password || !barNumber) {
-                alert('Please fill in all required fields.');
+        async function sendVerificationCode(event, email, userType) {
+            if (!email) {
+                alert('Please enter your email address first.');
                 return;
             }
 
-            // Simulate login
-            const btn = document.querySelector('.btn-lawyers');
+            const btn = event.target;
             const originalText = btn.innerHTML;
+            btn.innerHTML = 'Sending...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/api/send-verification-code`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, user_type: userType }),
+                });
+
+                const data = await response.json();
+                alert(data.message); // Show message from backend
+
+                if (response.ok) {
+                    btn.innerHTML = 'Code Sent';
+                    setTimeout(() => {
+                        btn.innerHTML = 'Resend Code';
+                        btn.disabled = false;
+                    }, 60000); // 60-second cooldown
+                } else {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error sending verification code:', error);
+                alert('An error occurred. Please check the console and try again.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function sendVictimVerificationCode(event) {
+            const email = document.getElementById('reg-victim-email').value;
+            sendVerificationCode(event, email, 'victim');
+        }
+
+        function sendLawyerVerificationCode(event) {
+            const email = document.getElementById('reg-lawyer-email').value;
+            sendVerificationCode(event, email, 'lawyer');
+        }
+
+        async function handleVictimRegistration(event) {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            
+            const formData = {
+                name: document.getElementById('reg-victim-name').value,
+                email: document.getElementById('reg-victim-email').value,
+                phone: document.getElementById('reg-victim-phone').value,
+                address: document.getElementById('reg-victim-address').value,
+                postcode: document.getElementById('reg-victim-postcode').value,
+                password: document.getElementById('reg-victim-password').value,
+                verification_code: document.getElementById('reg-victim-verification').value,
+            };
+
+            if (formData.password !== document.getElementById('reg-victim-confirm-password').value) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            btn.innerHTML = 'Creating Account...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/api/register-victim`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData),
+                });
+                const data = await response.json();
+                alert(data.message);
+
+                if (response.ok) {
+                    // Clear form and switch to login
+                    document.getElementById('reg-victim-name').form.reset();
+                    showSection('login');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('An error occurred during registration. Please try again.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        async function handleLawyerRegistration(event) {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+
+            const formData = {
+                name: document.getElementById('reg-lawyer-name').value,
+                email: document.getElementById('reg-lawyer-email').value,
+                phone: document.getElementById('reg-lawyer-phone').value,
+                firm: document.getElementById('reg-lawyer-firm').value,
+                postcode: document.getElementById('reg-lawyer-postcode').value,
+                bar_number: document.getElementById('reg-lawyer-bar').value,
+                specialization: document.getElementById('reg-lawyer-specialization').value,
+                experience: parseInt(document.getElementById('reg-lawyer-experience').value, 10),
+                password: document.getElementById('reg-lawyer-password').value,
+                verification_code: document.getElementById('reg-lawyer-verification').value,
+            };
+            
+            if (formData.password !== document.getElementById('reg-lawyer-confirm-password').value) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            btn.innerHTML = 'Submitting Application...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/api/register-lawyer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData),
+                });
+                const data = await response.json();
+                alert(data.message);
+
+                if (response.ok) {
+                    document.getElementById('reg-lawyer-name').form.reset();
+                    showSection('login');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('An error occurred during registration. Please try again.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        async function handleVictimLogin(event) {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+
+            const loginData = {
+                email: document.getElementById('victim-email').value,
+                password: document.getElementById('victim-password').value,
+            };
+
+            if (!loginData.email || !loginData.password) {
+                alert('Please enter both email and password.');
+                return;
+            }
+
+            btn.innerHTML = 'Logging In...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/api/login-victim`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loginData),
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // On successful login, redirect to the victim dashboard
+                    window.location.href = '/victim-dashboard';
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('An error occurred during login. Please try again.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        async function handleLawyerLogin(event) {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+
+            const loginData = {
+                email: document.getElementById('lawyer-email').value,
+                password: document.getElementById('lawyer-password').value,
+                bar_number: document.getElementById('lawyer-bar').value,
+            };
+            
+            if (!loginData.email || !loginData.password || !loginData.bar_number) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
             btn.innerHTML = 'Authenticating...';
             btn.disabled = true;
 
-            setTimeout(() => {
-                alert('Login successful! Redirecting to your dashboard...');
-                
-                // Reset form
-                document.getElementById('lawyer-email').value = '';
-                document.getElementById('lawyer-password').value = '';
-                document.getElementById('lawyer-bar').value = '';
-                
+            try {
+                 const response = await fetch(`${API_URL}/api/login-lawyer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loginData),
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    // On successful login, redirect to the lawyer dashboard
+                    window.location.href = '/lawyer-dashboard';
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('An error occurred during login. Please try again.');
+            } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-            }, 2000);
+            }
         }
 
         // Add some interactive animations
@@ -495,14 +855,11 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
+                // In this single-page context, this is for demonstration
+                console.log(`Would scroll to: ${this.getAttribute('href')}`);
             });
         });
     </script>
 </body>
 </html>
+

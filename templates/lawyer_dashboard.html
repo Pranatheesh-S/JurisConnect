@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advocate Dashboard - JusticeConnect</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .dashboard-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .dashboard-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .welcome-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .welcome-card h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .section h3 {
+            font-size: 1.5rem;
+            color: #1976D2;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        .case-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .case-item:last-child {
+            border-bottom: none;
+        }
+        .case-action {
+            padding: 8px 15px;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+        .case-action:hover {
+            background-color: #1565C0;
+        }
+        .logout-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: #e74c3c;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-header">
+        <h1>JusticeConnect</h1>
+        <p>Advocate Dashboard</p>
+    </div>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h2>Welcome, Advocate!</h2>
+            <p>Manage your cases, review new requests, and communicate with your clients.</p>
+            <a href="/" class="logout-btn">Logout</a>
+        </div>
+
+        <div class="section">
+            <h3>Active Cases</h3>
+            <div class="case-item">
+                <span>Case #JC-2025-0831A - Client: J. Doe</span>
+                <a href="#" class="case-action">View Details</a>
+            </div>
+            <div class="case-item">
+                <span>Case #JC-2025-0715B - Client: A. Smith</span>
+                <a href="#" class="case-action">View Details</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>New Client Requests</h3>
+            <p>You have 2 new requests pending review.</p>
+            <!-- Placeholder for new requests -->
+        </div>
+    </div>
+
+</body>
+</html>
