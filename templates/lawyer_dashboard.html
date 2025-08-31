@@ -32,25 +32,15 @@
             margin: 40px auto;
             padding: 20px;
         }
-        .welcome-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .welcome-card h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        .section {
+        .welcome-card, .section {
             background: white;
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             margin-bottom: 30px;
         }
+        .welcome-card { text-align: center; }
+        .welcome-card h2 { font-size: 2rem; margin-bottom: 10px; }
         .section h3 {
             font-size: 1.5rem;
             color: #1976D2;
@@ -59,14 +49,27 @@
             padding-bottom: 10px;
         }
         .case-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .case-item:last-child { border-bottom: none; }
+        .case-details {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
         }
-        .case-item:last-child {
-            border-bottom: none;
+        .case-info {
+            flex-grow: 1;
+        }
+        .case-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .case-meta {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 5px;
         }
         .case-action {
             padding: 8px 15px;
@@ -76,9 +79,7 @@
             border-radius: 6px;
             transition: background-color 0.3s ease;
         }
-        .case-action:hover {
-            background-color: #1565C0;
-        }
+        .case-action:hover { background-color: #1565C0; }
         .logout-btn {
             display: inline-block;
             margin-top: 20px;
@@ -90,9 +91,8 @@
             font-weight: 600;
             transition: background 0.3s ease;
         }
-        .logout-btn:hover {
-            background: #c0392b;
-        }
+        .logout-btn:hover { background: #c0392b; }
+        .no-cases { text-align: center; padding: 40px; }
     </style>
 </head>
 <body>
@@ -104,29 +104,40 @@
 
     <div class="container">
         <div class="welcome-card">
-            <h2>Welcome, Advocate!</h2>
-            <p>Manage your cases, review new requests, and communicate with your clients.</p>
-            <a href="/" class="logout-btn">Logout</a>
+            <!-- MODIFIED: Display lawyer's name dynamically -->
+            <h2>Welcome, {{ lawyer.name }}!</h2>
+            <p>Here you can review all submitted cases on the platform.</p>
+            <!-- MODIFIED: Corrected logout link -->
+            <a href="/logout" class="logout-btn">Logout</a>
         </div>
 
         <div class="section">
-            <h3>Active Cases</h3>
-            <div class="case-item">
-                <span>Case #JC-2025-0831A - Client: J. Doe</span>
-                <a href="#" class="case-action">View Details</a>
+            <h3>All Submitted Cases</h3>
+            <!-- MODIFIED: Check if there are any cases -->
+            {% if cases %}
+                <!-- MODIFIED: Loop through each case -->
+                {% for case in cases %}
+                <div class="case-item">
+                    <div class="case-details">
+                        <div class="case-info">
+                            <div class="case-title">{{ case.title }}</div>
+                            <div class="case-meta">
+                                Client: {{ case.victim.name }} | Filed on: {{ case.created_at.strftime('%B %d, %Y') }}
+                            </div>
+                        </div>
+                        <a href="#" class="case-action">View Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            <!-- MODIFIED: Handle the case where there are no cases -->
+            {% else %}
+            <div class="no-cases">
+                <p>There are currently no cases submitted on the platform.</p>
             </div>
-            <div class="case-item">
-                <span>Case #JC-2025-0715B - Client: A. Smith</span>
-                <a href="#" class="case-action">View Details</a>
-            </div>
-        </div>
-
-        <div class="section">
-            <h3>New Client Requests</h3>
-            <p>You have 2 new requests pending review.</p>
-            <!-- Placeholder for new requests -->
+            {% endif %}
         </div>
     </div>
 
 </body>
 </html>
+

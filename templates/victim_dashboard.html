@@ -19,38 +19,22 @@
             text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .dashboard-header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-        .dashboard-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+        .dashboard-header h1 { margin: 0; font-size: 2.5rem; }
+        .dashboard-header p { font-size: 1.2rem; opacity: 0.9; }
         .container {
             max-width: 1100px;
             margin: 40px auto;
             padding: 20px;
         }
-        .welcome-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .welcome-card h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        .section {
+        .welcome-card, .section {
             background: white;
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             margin-bottom: 30px;
         }
+        .welcome-card { text-align: center; }
+        .welcome-card h2 { font-size: 2rem; margin-bottom: 10px; }
         .section h3 {
             font-size: 1.5rem;
             color: #4CAF50;
@@ -59,38 +43,105 @@
             padding-bottom: 10px;
         }
         .case-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
+            padding: 20px;
             border-bottom: 1px solid #eee;
         }
-        .case-item:last-child {
-            border-bottom: none;
+        .case-item:last-child { border-bottom: none; }
+        .case-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .case-meta {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        .case-description {
+            color: #555;
+            line-height: 1.6;
         }
         .case-status {
-            padding: 5px 12px;
+            display: inline-block;
+            margin-top: 15px;
+            padding: 5px 15px;
             border-radius: 20px;
             font-weight: 600;
             color: white;
+            background-color: #f39c12; /* Default to Submitted/Open */
         }
-        .status-open { background-color: #f39c12; }
-        .status-progress { background-color: #3498db; }
-        .status-closed { background-color: #95a5a6; }
-        .logout-btn {
+        .btn, .logout-btn {
             display: inline-block;
             margin-top: 20px;
             padding: 12px 25px;
-            background: #e74c3c;
             color: white;
             text-decoration: none;
+            border: none;
             border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .logout-btn { background: #e74c3c; }
+        .logout-btn:hover { background: #c0392b; }
+        .btn-add-case { background: #3498db; margin-left: 15px; }
+        .btn-add-case:hover { background: #2980b9; }
+
+        .no-cases { text-align: center; padding: 40px; }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 15px;
+            position: relative;
+        }
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover, .close-btn:focus { color: black; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .btn-submit {
+            padding: 12px 25px;
+            border: none;
+            background: #4CAF50;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
             font-weight: 600;
             transition: background 0.3s ease;
         }
-        .logout-btn:hover {
-            background: #c0392b;
-        }
+        .btn-submit:hover { background: #45a049; }
     </style>
 </head>
 <body>
@@ -102,30 +153,110 @@
 
     <div class="container">
         <div class="welcome-card">
-            <h2>Welcome Back!</h2>
-            <p>Here you can track your case status, communicate with your advocate, and access important resources.</p>
-            <a href="/" class="logout-btn">Logout</a>
+            <h2>Welcome, {{ victim.name }}!</h2>
+            <p>Here you can track your case status and access important resources.</p>
+            <a href="/logout" class="logout-btn">Logout</a>
+            <!-- MODIFIED: Added button to open the modal -->
+            <button id="addCaseBtn" class="btn btn-add-case">File a New Case</button>
         </div>
 
         <div class="section">
-            <h3>Your Case Status</h3>
-            <div class="case-item">
-                <span>Case #JC-2025-0831A - Initial Consultation</span>
-                <span class="case-status status-open">Open</span>
-            </div>
-            <div class="case-item">
-                <span>Case #JC-2025-0715B - Document Submission</span>
-                <span class="case-status status-progress">In Progress</span>
-            </div>
-        </div>
-
-        <div class="section">
-            <h3>Secure Messages</h3>
-            <p>You have 1 unread message from your advocate.</p>
-            <!-- Placeholder for messages -->
+            <h3>Your Cases</h3>
+            {% if cases %}
+                {% for case in cases %}
+                <div class="case-item">
+                    <div class="case-title">{{ case.title }}</div>
+                    <div class="case-meta">
+                        Filed on: {{ case.created_at.strftime('%B %d, %Y at %I:%M %p') }} UTC
+                    </div>
+                    <p class="case-description">{{ case.description }}</p>
+                    <span class="case-status">{{ case.status }}</span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-cases">
+                    <p>You have not submitted any cases yet.</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 
+    <!-- MODIFIED: The Modal for adding a new case -->
+    <div id="addCaseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Add a New Case</h3>
+            <form id="add-case-form">
+                <div class="form-group">
+                    <label for="title">Case Title</label>
+                    <input type="text" id="title" name="title" placeholder="e.g., Unfair dismissal from work" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Case Description</label>
+                    <textarea id="description" name="description" rows="6" placeholder="Please provide a detailed description of the incident, including dates, names, and any relevant details." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Submit Case</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal handling script
+        const modal = document.getElementById('addCaseModal');
+        const btn = document.getElementById('addCaseBtn');
+        const span = document.getElementsByClassName('close-btn')[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = 'block';
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Form submission script
+        document.getElementById('add-case-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const submitBtn = this.querySelector('.btn-submit');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.innerHTML = 'Submitting...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/add-case', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, description }),
+                });
+
+                const data = await response.json();
+                alert(data.message);
+
+                if (response.ok) {
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error('Error submitting case:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>
 
